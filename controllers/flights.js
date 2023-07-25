@@ -5,8 +5,28 @@ module.exports = {
   new: newFlight,
   create,
   index,
-  show
+  show,
+  addDestination
 };
+
+function addDestination(req, res) {
+  const { airport, arrival } = req.body;
+  Flight.findById(req.params.id)
+    .then((flight) => {
+      if (!flight) {
+        return res.status(404).send('Flight not found');
+      }
+      flight.destinations.push({ airport, arrival }); 
+      return flight.save();
+    })
+    .then(() => {
+      res.redirect(`/flights/${req.params.id}`);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error adding destination');
+    });
+}
 
 function index(req, res) {
   Flight.find()

@@ -1,11 +1,37 @@
 <!-- views/flights/show.ejs -->
 <%- include('../partials/header') %>
-  <h2>Flight Details</h2>
-  <h4>Airline----<%= flight.airline %></h4>
+<h2>Flight Details</h2>
+<section id="show-page">
+  <div>Airline: </div>
+  <div><%= flight.airline %></div>
+  <div>Airport: </div>
+  <div><%= flight.airport %></div>
+  <div>Flight Number: </div>
+  <div><%= flight.flightNo %></div>
+  <div>Departs: </div>
+  <div><%= flight.departs %></div>
+</section>
+<h2>Destinations</h2>
+  <ul>
+    <% flight.destinations.forEach(function(destination) { %>
+      <li><%= destination.airport %> - <%= destination.arrival %></li>
+    <% }) %>
+  </ul>
 
-  <h4>Airport----<%= flight.airport %></h4>
-    
-  <h4>FlightNo---<%= flight.flightNo %></h4>
-    
-  <h4>Departs----<%= flight.departs %></h4>
+<h2>Add Destination</h2>
+<form action="/flights/<%= flight._id %>/destinations" method="POST">
+  <label>Airport:
+    <select name="airport">
+      <option value="DEN">DEN</option>
+      <option value="AUS">AUS</option>
+      <option value="DFW">DFW</option>
+      <option value="LAX">LAX</option>
+      <option value="SAN">SAN</option>
+    </select>
+  </label><br>
+  <label>Arrival Date/Time:
+    <input type="datetime-local" name="arrival" required>
+  </label><br>
+  <button type="submit">Add</button>
+</form>
 <%- include('../partials/footer') %>
