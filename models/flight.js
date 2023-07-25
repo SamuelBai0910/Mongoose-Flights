@@ -17,15 +17,27 @@ const flightSchema = new mongoose.Schema({
   },
   flightNo: {
     type: Number,
-    required: true
+    required: true,
+    min: 10,
+    max: 9999
   },
   departs: {
     type: Date,
     required: true
-  }
+  },
+  // destinations:	[destinationSchema]
 });
 
 module.exports = mongoose.model(
   'Flight', 
   flightSchema
 );
+// const destinationSchema = new Schema({
+//   airport: {
+//     type: String,
+//     enum: ['DEN', 'AUS', 'DFW', 'LAX', 'SAN']
+//   },
+//   arrival: {
+//     type: Date
+//   }
+// })

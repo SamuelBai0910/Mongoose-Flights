@@ -4,7 +4,8 @@ const Flight = require('../models/flight');
 module.exports = {
   new: newFlight,
   create,
-  index
+  index,
+  show
 };
 
 function index(req, res) {
@@ -18,6 +19,13 @@ function index(req, res) {
       console.error('Error fetching flights:', err);
       res.status(500).send('Error fetching flights');
     });
+}
+
+function show(req, res) {
+  Flight.findById(req.params.id)
+  .then(flight => {
+    res.render('flights/show', { flight });  
+  })
 }
 
 function newFlight(req, res) {

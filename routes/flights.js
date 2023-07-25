@@ -4,8 +4,6 @@ var router = express.Router();
 
 var flightsController = require('../controllers/flights');
 
-/* GET routers for flights show */
-// router.get('/show', flightsController.show);
 
 /* GET routers for flights new */
 router.get('/new', flightsController.new);
@@ -15,5 +13,8 @@ router.post('/', flightsController.create);
 
 // Get route for /flights INDEX
 router.get('/', flightsController.index);
+
+/* GET routers for flights show */
+router.get('/:id', flightsController.show);
 
 module.exports = router;
