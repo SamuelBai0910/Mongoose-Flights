@@ -34,4 +34,15 @@
   </label><br>
   <button type="submit">Add</button>
 </form>
+
+<!-- List of existing tickets for this flight -->
+<h3>Tickets:</h3>
+<ul>
+  <% tickets.forEach(function(ticket) { %>
+    <li><%= ticket.seat %> - <%= ticket.price %></li>
+    <% }) %>
+  </ul>
+  <!-- Link/button to create a new ticket -->
+  <a href="/flights/<%= flight._id %>/tickets/new">Add Ticket</a>
+
 <%- include('../partials/footer') %>

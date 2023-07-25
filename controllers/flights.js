@@ -1,12 +1,15 @@
 // controllers/flights.js
 const Flight = require('../models/flight');
+const Ticket = require('../models/ticket');
 
 module.exports = {
   new: newFlight,
   create,
   index,
   show,
-  addDestination
+  addDestination,
+  addTicketForm,
+  createTicket
 };
 
 function addDestination(req, res) {
@@ -43,9 +46,63 @@ function index(req, res) {
 
 function show(req, res) {
   Flight.findById(req.params.id)
-  .then(flight => {
-    res.render('flights/show', { flight });  
-  })
+    .then(flight => {
+      if (!flight) {
+        console.error('Error fetching flight: Flight not found');
+        return res.status(404).send('Flight not found');
+      }
+
+      Ticket.find({ flight: flight._id })
+        .then(tickets => {
+          res.render('flights/show', {
+            flight: flight,
+            tickets: tickets
+          });
+        })
+        .catch(err => {
+          console.error('Error fetching tickets:', err);
+          res.status(500).send('Error fetching tickets');
+        });
+    })
+    .catch(err => {
+      console.error('Error fetching flight:', err);
+      res.status(500).send('Error fetching flight');
+    });
+}
+
+function addTicketForm(req, res) {
+  const flightId = req.params.id;
+  res.render('tickets/new', { flightId }); // Pass flightId to the new ticket view
+}
+
+function createTicket(req, res) {
+  const flightId = req.params.id;
+  const { seat, price } = req.body;
+
+  Flight.findById(flightId)
+    .then(flight => {
+      if (!flight) {
+        console.error('Error fetching flight: Flight not found');
+        return res.status(404).send('Flight not found');
+      }
+
+      // Create a new ticket and set its flight property to the flight ID
+      const newTicket = new Ticket({
+        seat: seat,
+        price: price,
+        flight: flight._id
+      });
+
+      // Save the ticket to the database
+      return newTicket.save();
+    })
+    .then(() => {
+      res.redirect(`/flights/${flightId}`);
+    })
+    .catch(err => {
+      console.error('Error creating ticket:', err);
+      res.status(500).send('Error creating ticket');
+    });
 }
 
 function newFlight(req, res) {

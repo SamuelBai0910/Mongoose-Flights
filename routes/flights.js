@@ -22,4 +22,10 @@ router.get('/:id', flightsController.show);
 // destinations
 router.post('/:id/destinations', flightsController.addDestination);
 
+// Display the form to create a new ticket for the flight
+router.get('/:id/tickets/new', flightsController.addTicketForm);
+
+// Create a new ticket for the flight
+router.post('/:id/tickets', flightsController.createTicket);
+
 module.exports = router;
